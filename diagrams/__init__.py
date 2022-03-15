@@ -75,11 +75,11 @@ class Diagram:
     # fmt: on
 
     # TODO: Label position option
-    # TODO: Save directory option (filename + directory?)
     def __init__(
         self,
         name: str = "",
         filename: str = "",
+        filepath: str = "",
         direction: str = "LR",
         curvestyle: str = "ortho",
         outformat: str = "png",
@@ -108,7 +108,8 @@ class Diagram:
         elif not filename:
             filename = "_".join(self.name.split()).lower()
         self.filename = filename
-        self.dot = Digraph(self.name, filename=self.filename)
+        self.filepath = filepath
+        self.dot = Digraph(self.name, filename=self.filename, directory=self.filepath)
 
         # Set attributes.
         for k, v in self._default_graph_attrs.items():
@@ -126,7 +127,6 @@ class Diagram:
         if not self._validate_curvestyle(curvestyle):
             raise ValueError(f'"{curvestyle}" is not a valid curvestyle')
         self.dot.graph_attr["splines"] = curvestyle
-
         if isinstance(outformat, list):
             for one_format in outformat:
                 if not self._validate_outformat(one_format):
@@ -153,7 +153,7 @@ class Diagram:
     def __exit__(self, exc_type, exc_value, traceback):
         self.render()
         # Remove the graphviz file leaving only the image.
-        os.remove(self.filename)
+        os.remove(os.path.join(self.filepath, self.filename))
         setdiagram(None)
 
     def _repr_png_(self):

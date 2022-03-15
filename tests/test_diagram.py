@@ -101,16 +101,26 @@ class DiagramTest(unittest.TestCase):
             Node("node1")
         self.assertTrue(os.path.exists(f"{self.name}.png"))
 
+    def test_custom_filepath(self):
+        self.name = "example_2"
+        self.filepath = "outputs/"
+        with Diagram(name="example_2", filepath="outputs/", show=False):
+            Node("node2")
+        self.assertTrue(os.path.exists(os.path.join(self.filepath, f"{self.name}.png")))
+
+        os.remove(os.path.join(self.filepath, f"{self.name}.png"))
+        os.rmdir(self.filepath)
+
     def test_empty_name(self):
         """Check that providing an empty name don't crash, but save in a diagrams_image.xxx file."""
-        self.name = 'diagrams_image'
+        self.name = "diagrams_image"
         with Diagram(show=False):
             Node("node1")
         self.assertTrue(os.path.exists(f"{self.name}.png"))
 
     def test_outformat_list(self):
         """Check that outformat render all the files from the list."""
-        self.name = 'diagrams_image'
+        self.name = "diagrams_image"
         with Diagram(show=False, outformat=["dot", "png"]):
             Node("node1")
         # both files must exist
@@ -305,7 +315,6 @@ class ResourcesTest(unittest.TestCase):
         i.e. resources/<provider>/<type>/<image>, so check that this depth isn't
         exceeded.
         """
-        resources_dir = pathlib.Path(__file__).parent.parent / 'resources'
-        max_depth = max(os.path.relpath(d, resources_dir).count(os.sep) + 1
-                        for d, _, _ in os.walk(resources_dir))
+        resources_dir = pathlib.Path(__file__).parent.parent / "resources"
+        max_depth = max(os.path.relpath(d, resources_dir).count(os.sep) + 1 for d, _, _ in os.walk(resources_dir))
         self.assertLessEqual(max_depth, 2)
