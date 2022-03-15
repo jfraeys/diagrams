@@ -41,6 +41,8 @@ You should have docker installed in your system, if not click [here](https://doc
 
 To be able to develop and run diagrams locally on you Mac device, you should have [Python](https://www.python.org/downloads/), [Go](https://golang.org/doc/install) and [brew](https://brew.sh/) installed on your system.
 
+To install Go packages add export $GOPATH=$HOME/go and export $PATH=$GOPATH/bin to ~/.bash_profile
+
 1. Go to diagrams root directory.
 
 2. Install poetry, the Python project management packge used by diagrams.
@@ -59,7 +61,7 @@ To be able to develop and run diagrams locally on you Mac device, you should hav
 
     ```shell
     brew install imagemagick inkscape black
-    go get github.com/mingrammer/round
+    go install github.com/mingrammer/round@latest
     ```
 
 5. Run unit tests to confirm that it's working.
